@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Projectile2D : MonoBehaviour
@@ -19,6 +20,12 @@ public class Projectile2D : MonoBehaviour
             {
                 target.transform.position = new Vector2(hit.point.x, hit.point.y);
                 Debug.Log("hit " + hit.collider.name);
+
+                Vector2 projectileVelocity = CalculateProjectileVelocity(shootPoint.position, hit.point, 1f);
+
+                Rigidbody2D shootBullet = Instantiate(bulletPrefab, shootPoint.position, Quaternion.identity);
+                
+                shootBullet.linearVelocity = projectileVelocity;
             }
         }
     }
@@ -28,7 +35,7 @@ public class Projectile2D : MonoBehaviour
         Vector2 distance = target - origin;
 
         float velocityX = distance.x / time;
-        float velocityY = distance.y / time + 0.5f * Mathf.Abs(Physics2D.gravity.y);
+        float velocityY = distance.y / time + 0.5f * Mathf.Abs(Physics2D.gravity.y) * time;
         
         Vector2 projectileVelocity = new Vector2(velocityX, velocityY);
 
